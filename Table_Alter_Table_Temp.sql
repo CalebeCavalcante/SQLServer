@@ -1,4 +1,4 @@
-USE [DBMIS]
+USE [DATA_BASE_NAME]
 GO
 
 SET ANSI_NULLS ON
@@ -16,15 +16,18 @@ DECLARE @TABLE_TEMP TABLE  (
 ) 
 
 /****** Inserindo dados na tabela temporária ******/
-INSERT @TABLE_TEMP SELECT * FROM [dbo].[TB_GEO_FECHADOS_HIST]
+INSERT @TABLE_TEMP SELECT * FROM [dbo].[TB_USUARIOS]
 
 /****** Deletando Objeto Table ******/
-DROP TABLE  [dbo].[TB_GEO_FECHADOS_HIST]
+DROP TABLE  [dbo].[TB_USUARIOS]
 
 /****** Criando a Tabela Novamente Com os Novos campos necessários ******/
-CREATE TABLE [dbo].[TB_GEO_FECHADOS_HIST](
+CREATE TABLE [dbo].[TB_USUARIOS](
 	[MATRICULA] [int] NOT NULL,
 	[NOME_COMPLETO] [nvarchar](255) NOT NULL
+	,
+	[NOME_SUPERVISOR] [nvarchar](255) NULL,
+	[STATUS_CODE] [int] NOT NULL
 ) ON [PRIMARY]
 
 /****** Inserindo dados da Table Temporário para manter o histórico ******/
@@ -33,7 +36,7 @@ CREATE TABLE [dbo].[TB_GEO_FECHADOS_HIST](
 É obrigatório listar os campos que serão inseridos, pois colocar um insert into table select * from não vai funcionar pois novos campos foram inseridos na criação da tabela.
 O comando "GO" não pode ser executado antes de inserir, pois se for feito, os dados temporários serão apagados
  ******/
-INSERT [dbo].[TB_GEO_FECHADOS_HIST] (
+INSERT [dbo].[TB_USUARIOS] (
 	[MATRICULA],
 	[NOME_COMPLETO] 
 ) SELECT * FROM @TABLE_TEMP
